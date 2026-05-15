@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dulce Tentación</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --verde:    #2d6a4f;
+    --verde2:   #40916c;
+    --verde3:   #74c69d;
+    --verde4:   #d8f3dc;
+    --morado:   #6b35a3;
+    --morado2:  #9b59d0;
+    --morado3:  #c99ef0;
+    --morado4:  #f0e6ff;
+    --dorado:   #f4a261;
+    --rosa:     #e76f8a;
+    --bg:       #0d1117;
+    --bg2:      #131920;
+    --bg3:      #1a2430;
+    --bgcard:   #162030;
+    --text:     #e8f4ea;
+    --muted:    #8aab96;
+    --border:   rgba(116,198,157,0.18);
+    --border2:  rgba(155,89,208,0.3);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--morado); border-radius: 3px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 3rem;
+    height: 66px;
+    background: rgba(13,17,23,0.88);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem; font-style: italic;
+    background: linear-gradient(90deg, var(--verde3), var(--morado3));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: 0.8rem; font-weight: 400;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    transition: color 0.25s;
+    position: relative; padding-bottom: 2px;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: 0; left: 0;
+    width: 0; height: 1px;
+    background: linear-gradient(90deg, var(--verde3), var(--morado3));
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--verde3); }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* ── HERO ── */
+  #inicio {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 100px 2rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-orbs {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(90px); opacity: 0.25;
+    animation: drift 12s ease-in-out infinite alternate;
+  }
+  .orb1 { width: 500px; height: 500px; background: var(--morado); top: -100px; left: -150px; }
+  .orb2 { width: 400px; height: 400px; background: var(--verde); bottom: -80px; right: -100px; animation-delay: -4s; }
+  .orb3 { width: 300px; height: 300px; background: var(--dorado); top: 40%; left: 50%; transform: translate(-50%,-50%); opacity: 0.12; animation-delay: -8s; }
+  @keyframes drift {
+    from { transform: translate(0,0) scale(1); }
+    to   { transform: translate(30px,40px) scale(1.08); }
+  }
+  .hero-tag {
+    display: inline-block;
+    padding: 0.35rem 1.1rem;
+    background: rgba(116,198,157,0.12);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--verde3); margin-bottom: 2rem;
+    opacity: 0; animation: fadeUp 0.8s 0.1s forwards;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 11vw, 8rem);
+    font-weight: 700; line-height: 1;
+    background: linear-gradient(135deg, var(--verde3) 0%, #fff 40%, var(--morado3) 80%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 0.6rem;
+    opacity: 0; animation: fadeUp 0.8s 0.3s forwards;
+  }
+  .hero-sub {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1rem, 3vw, 1.6rem);
+    font-style: italic; color: var(--morado3);
+    margin-bottom: 1.6rem;
+    opacity: 0; animation: fadeUp 0.8s 0.5s forwards;
+  }
+  .hero-desc {
+    max-width: 560px; color: var(--muted); font-size: 1rem;
+    margin-bottom: 2.8rem;
+    opacity: 0; animation: fadeUp 0.8s 0.7s forwards;
+  }
+  .hero-btns {
+    display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+    opacity: 0; animation: fadeUp 0.8s 0.9s forwards;
+  }
+  .btn {
+    padding: 0.8rem 2rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem; font-weight: 500;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    text-decoration: none; border-radius: 3px;
+    cursor: pointer; border: none; transition: all 0.3s;
+  }
+  .btn-green {
+    background: linear-gradient(135deg, var(--verde), var(--verde2));
+    color: #fff;
+  }
+  .btn-green:hover { background: linear-gradient(135deg, var(--verde2), var(--verde3)); transform: translateY(-2px); }
+  .btn-purple {
+    background: transparent;
+    border: 1px solid var(--morado2);
+    color: var(--morado3);
+  }
+  .btn-purple:hover { background: rgba(155,89,208,0.15); transform: translateY(-2px); }
+
+  /* ── SECTION BASE ── */
+  section { padding: 6rem 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-eyebrow {
+    font-size: 0.68rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--verde3); margin-bottom: 0.6rem; text-align: center;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700; text-align: center;
+    color: var(--text); margin-bottom: 1rem;
+  }
+  .section-title span { font-style: italic; color: var(--morado3); }
+  .section-line {
+    width: 60px; height: 2px; margin: 0 auto 1.5rem;
+    background: linear-gradient(90deg, var(--verde2), var(--morado2));
+    border-radius: 2px;
+  }
+  .section-lead {
+    text-align: center; color: var(--muted);
+    max-width: 620px; margin: 0 auto 4rem;
+    font-size: 0.95rem;
+  }
+
+  /* ── BANNER / IMAGEN DEL GRUPO ── */
+  #inicio .band-photo-wrapper {
+    width: 100%; max-width: 800px; margin: 3rem auto 0;
+    opacity: 0; animation: fadeUp 0.9s 1.1s forwards;
+  }
+  .band-photo-box {
+    width: 100%; aspect-ratio: 16/7;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 1rem; cursor: pointer; position: relative;
+    overflow: hidden; transition: border-color 0.3s;
+  }
+  .band-photo-box:hover { border-color: var(--verde3); }
+  .band-photo-box img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%; object-fit: cover;
+    border-radius: 8px;
+  }
+  .band-photo-box .upload-hint {
+    z-index: 1; text-align: center; pointer-events: none;
+  }
+  .band-photo-box .upload-hint svg { opacity: 0.4; margin-bottom: 0.5rem; }
+  .band-photo-box .upload-hint p { font-size: 0.8rem; color: var(--muted); }
+  .band-photo-box .upload-hint span { font-size: 0.68rem; color: var(--verde3); letter-spacing: 0.15em; text-transform: uppercase; }
+  #bandPhotoInput { display: none; }
+
+  /* ── CANCIONES ── */
+  #canciones { background: var(--bg2); }
+  .upload-zone {
+    border: 2px dashed var(--border2);
+    border-radius: 10px;
+    padding: 2.5rem;
+    text-align: center;
+    background: rgba(107,53,163,0.06);
+    cursor: pointer; transition: all 0.3s;
+    margin-bottom: 3rem;
+  }
+  .upload-zone:hover, .upload-zone.drag { border-color: var(--morado2); background: rgba(107,53,163,0.12); }
+  .upload-zone svg { opacity: 0.5; margin-bottom: 0.8rem; }
+  .upload-zone h4 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--text); margin-bottom: 0.4rem; }
+  .upload-zone p { font-size: 0.83rem; color: var(--muted); }
+  .upload-zone span { color: var(--morado3); font-weight: 500; }
+  #audioInput { display: none; }
+
+  .song-meta-form {
+    display: none;
+    background: var(--bgcard);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 2rem; margin-bottom: 3rem;
+    gap: 1rem;
+    flex-direction: column;
+  }
+  .song-meta-form.visible { display: flex; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-group label { font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--verde3); }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: var(--bg3); border: 1px solid var(--border);
+    color: var(--text); padding: 0.7rem 1rem;
+    font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
+    border-radius: 4px; outline: none; transition: border-color 0.25s;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--morado2); }
+  .form-group select option { background: var(--bg3); }
+  .form-group textarea { min-height: 80px; resize: none; }
+  .form-actions { display: flex; gap: 1rem; }
+
+  .songs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+  .song-card {
+    background: var(--bgcard);
+    border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.5rem;
+    transition: border-color 0.3s, transform 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .song-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--verde2), var(--morado2));
+  }
+  .song-card:hover { border-color: var(--verde3); transform: translateY(-3px); }
+  .song-header { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
+  .song-icon {
+    width: 46px; height: 46px; border-radius: 8px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--verde), var(--morado));
+    display: flex; align-items: center; justify-content: center;
+  }
+  .song-icon svg { opacity: 0.9; }
+  .song-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--text); margin-bottom: 0.2rem; }
+  .song-artist { font-size: 0.78rem; color: var(--verde3); letter-spacing: 0.08em; }
+  .song-badge {
+    display: inline-block; padding: 0.2rem 0.7rem;
+    background: rgba(155,89,208,0.18); border: 1px solid rgba(155,89,208,0.3);
+    border-radius: 20px; font-size: 0.65rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--morado3); margin-bottom: 0.8rem;
+  }
+  .song-desc { font-size: 0.83rem; color: var(--muted); margin-bottom: 1.2rem; line-height: 1.6; }
+  .audio-player { width: 100%; }
+  audio {
+    width: 100%;
+    border-radius: 30px;
+    height: 36px;
+    accent-color: var(--verde2);
+  }
+  audio::-webkit-media-controls-panel { background: var(--bg3); border-radius: 30px; }
+  .song-delete {
+    position: absolute; top: 0.9rem; right: 0.9rem;
+    background: none; border: none; cursor: pointer;
+    color: var(--muted); font-size: 0.8rem;
+    transition: color 0.2s; padding: 0.2rem 0.4rem;
+  }
+  .song-delete:hover { color: var(--rosa); }
+  .no-songs {
+    text-align: center; padding: 3rem;
+    color: var(--muted); font-size: 0.9rem;
+    grid-column: 1/-1;
+  }
+  .no-songs svg { opacity: 0.25; margin-bottom: 1rem; }
+
+  /* ── PROCESO CREATIVO ── */
+  #proceso { background: var(--bg); }
+  .proceso-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;
+  }
+  .proceso-card {
+    background: var(--bgcard); border: 1px solid var(--border);
+    border-radius: 10px; padding: 2rem; position: relative; overflow: hidden;
+  }
+  .proceso-card::after {
+    content: attr(data-num);
+    position: absolute; bottom: -10px; right: 10px;
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem; font-weight: 700; font-style: italic;
+    color: rgba(116,198,157,0.06); line-height: 1;
+    pointer-events: none;
+  }
+  .proceso-num {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--verde), var(--morado));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 500; color: #fff;
+    margin-bottom: 1rem;
+  }
+  .proceso-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; color: var(--text); margin-bottom: 0.7rem;
+  }
+  .proceso-card p { font-size: 0.87rem; color: var(--muted); line-height: 1.7; }
+  .proceso-tools {
+    display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;
+  }
+  .tool-tag {
+    padding: 0.25rem 0.75rem;
+    background: rgba(116,198,157,0.1); border: 1px solid var(--border);
+    border-radius: 20px; font-size: 0.68rem;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--verde3);
+  }
+
+  /* ── NORMAS / AVISO LEGAL ── */
+  #normas { background: var(--bg2); }
+  .normas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .norma-card {
+    background: var(--bgcard); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.8rem;
+    transition: border-color 0.3s;
+  }
+  .norma-card:hover { border-color: var(--morado2); }
+  .norma-icon {
+    width: 44px; height: 44px; border-radius: 8px; margin-bottom: 1rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .norma-icon.green { background: rgba(64,145,108,0.18); }
+  .norma-icon.purple { background: rgba(155,89,208,0.18); }
+  .norma-icon.gold { background: rgba(244,162,97,0.18); }
+  .norma-card h3 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--text); margin-bottom: 0.7rem; }
+  .norma-card p { font-size: 0.83rem; color: var(--muted); line-height: 1.7; }
+  .license-badges { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
+  .license-badge {
+    padding: 0.2rem 0.65rem;
+    border-radius: 4px; font-size: 0.65rem;
+    font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .lb-cc { background: rgba(244,162,97,0.2); color: var(--dorado); border: 1px solid rgba(244,162,97,0.3); }
+  .lb-cp { background: rgba(231,111,138,0.15); color: var(--rosa); border: 1px solid rgba(231,111,138,0.3); }
+  .lb-cl { background: rgba(116,198,157,0.15); color: var(--verde3); border: 1px solid var(--border); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 3.5rem 3rem 2rem;
+  }
+  .footer-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 2fr 1fr 1fr;
+    gap: 3rem; margin-bottom: 3rem;
+  }
+  .footer-brand h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-style: italic;
+    background: linear-gradient(90deg, var(--verde3), var(--morado3));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 0.8rem;
+  }
+  .footer-brand p { font-size: 0.83rem; color: var(--muted); line-height: 1.7; max-width: 320px; }
+  .footer-col h4 {
+    font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--verde3); margin-bottom: 1rem;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .footer-col ul li { font-size: 0.83rem; color: var(--muted); }
+  .footer-bottom {
+    max-width: 1100px; margin: 0 auto;
+    padding-top: 2rem; border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-bottom p { font-size: 0.75rem; color: var(--muted); }
+  .footer-bottom span { color: var(--verde3); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    nav { padding: 0 1.2rem; }
+    .nav-links { display: none; }
+    .proceso-grid,
+    .normas-grid,
+    .footer-inner { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#inicio" class="nav-brand">Dulce Tentación</a>
+  <ul class="nav-links">
+    <li><a href="#inicio">Inicio</a></li>
+    <li><a href="#canciones">Canciones</a></li>
+    <li><a href="#proceso">Proceso Creativo</a></li>
+    <li><a href="#normas">Normas</a></li>
+  </ul>
+</nav>
+
+<!-- INICIO -->
+<section id="inicio">
+  <div class="hero-orbs">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+  <div class="hero-tag">🎵 Bachata · Fusión · Sentimiento</div>
+  <h1 class="hero-title">Dulce Tentación</h1>
+  <p class="hero-sub">La música que mueve el alma</p>
+  <p class="hero-desc">
+    Somos un grupo musical apasionado por la bachata y la fusión de ritmos.
+    Cada canción nace de la emoción, la historia y el deseo de conectar con quienes nos escuchan.
+  </p>
+  <div class="hero-btns">
+    <a href="#canciones" class="btn btn-green">Escuchar Música</a>
+    <a href="#proceso" class="btn btn-purple">Proceso Creativo</a>
+  </div>
+
+  <!-- FOTO DEL GRUPO -->
+  <div class="band-photo-wrapper">
+    <div class="band-photo-box" id="bandPhotoBox" onclick="document.getElementById('bandPhotoInput').click()">
+      <div class="upload-hint" id="bandHint">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--verde3)" stroke-width="1.2">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21,15 16,10 5,21"/>
+        </svg>
+        <p>Haz clic para subir la foto del grupo</p>
+        <span>Recomendado: 1200×500 px</span>
+      </div>
+    </div>
+    <input type="file" id="bandPhotoInput" accept="image/*"/>
+  </div>
+</section>
+
+<!-- CANCIONES -->
+<section id="canciones">
+  <div class="container">
+    <p class="section-eyebrow">Discografía</p>
+    <h2 class="section-title reveal">Nuestras <span>Canciones</span></h2>
+    <div class="section-line"></div>
+    <p class="section-lead reveal">Sube tus canciones y completa la información de cada una. Se mostrarán como tarjetas con reproductor de audio.</p>
+
+    <!-- UPLOAD ZONE -->
+    <div class="upload-zone reveal" id="uploadZone" onclick="document.getElementById('audioInput').click()">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--morado3)" stroke-width="1.2">
+        <path d="M9 18V5l12-2v13"/>
+        <circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+      </svg>
+      <h4>Subir una canción</h4>
+      <p>Arrastra aquí o <span>haz clic para seleccionar</span> un archivo de audio</p>
+      <p style="font-size:0.73rem; margin-top:0.4rem;">MP3 · WAV · OGG · M4A</p>
+    </div>
+    <input type="file" id="audioInput" accept="audio/*"/>
+
+    <!-- META FORM -->
+    <div class="song-meta-form" id="songMetaForm">
+      <p style="font-size:0.8rem; color:var(--verde3); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:0.5rem;">
+        Completar información de la canción
+      </p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Título de la canción *</label>
+          <input type="text" id="songTitle" placeholder="Ej. Entre tus brazos"/>
+        </div>
+        <div class="form-group">
+          <label>Autor / Grupo *</label>
+          <input type="text" id="songArtist" value="Dulce Tentación" placeholder="Ej. Dulce Tentación"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Género musical</label>
+          <select id="songGenre">
+            <option value="Bachata">Bachata</option>
+            <option value="Bachata Fusión">Bachata Fusión</option>
+            <option value="Salsa">Salsa</option>
+            <option value="Merengue">Merengue</option>
+            <option value="Pop Latino">Pop Latino</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Año</label>
+          <input type="number" id="songYear" placeholder="2024" min="2000" max="2099"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Descripción breve</label>
+        <textarea id="songDesc" placeholder="Cuéntanos sobre esta canción: su historia, inspiración o mensaje..."></textarea>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-green" id="addSongBtn" style="font-size:0.75rem; padding:0.7rem 1.6rem;">Añadir canción</button>
+        <button class="btn btn-purple" id="cancelSongBtn" style="font-size:0.75rem; padding:0.7rem 1.6rem;">Cancelar</button>
+      </div>
+    </div>
+
+    <!-- SONGS GRID -->
+    <div class="songs-grid" id="songsGrid">
+      <div class="no-songs" id="noSongs">
+        <div>
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1">
+            <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+          </svg>
+          <p>Aún no hay canciones. ¡Sube la primera!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESO CREATIVO -->
+<section id="proceso">
+  <div class="container">
+    <p class="section-eyebrow">Detrás de la Música</p>
+    <h2 class="section-title reveal">Proceso <span>Creativo</span></h2>
+    <div class="section-line"></div>
+    <p class="section-lead reveal">Así nacen nuestras canciones: desde la idea inicial hasta el resultado final, con el apoyo de la inteligencia artificial.</p>
+
+    <div class="proceso-grid">
+      <div class="proceso-card reveal" data-num="01">
+        <div class="proceso-num">1</div>
+        <h3>Idea Inicial de la Canción</h3>
+        <p>Todo parte de una emoción, una historia o una imagen. Definimos el mensaje que queremos transmitir, el ritmo base de bachata y la estructura de la letra antes de empezar a crear.</p>
+      </div>
+      <div class="proceso-card reveal" data-num="02">
+        <div class="proceso-num">2</div>
+        <h3>Herramientas de IA Utilizadas</h3>
+        <p>Utilizamos inteligencia artificial para generar ideas de letras, armonías y producción musical. Entre las herramientas que usamos:</p>
+        <div class="proceso-tools">
+          <span class="tool-tag">Suno AI</span>
+          <span class="tool-tag">Udio</span>
+          <span class="tool-tag">ChatGPT</span>
+          <span class="tool-tag">Claude</span>
+          <span class="tool-tag">Loudly</span>
+        </div>
+      </div>
+      <div class="proceso-card reveal" data-num="03">
+        <div class="proceso-num">3</div>
+        <h3>Prompts o Instrucciones a la IA</h3>
+        <p>Redactamos instrucciones detalladas para guiar a la IA. Por ejemplo: <em style="color:var(--morado3);">"Crea una bachata romántica con guitarra acústica, letra en español sobre el reencuentro después de una larga separación, tempo moderado, estilo Romeo Santos."</em></p>
+      </div>
+      <div class="proceso-card reveal" data-num="04">
+        <div class="proceso-num">4</div>
+        <h3>Creación y Edición Final</h3>
+        <p>Revisamos el resultado de la IA y realizamos ajustes manuales: corregimos letras, modificamos la melodía, ajustamos la mezcla y añadimos nuestra propia interpretación vocal o instrumental.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NORMAS / AVISO LEGAL -->
+<section id="normas">
+  <div class="container">
+    <p class="section-eyebrow">Aviso Legal</p>
+    <h2 class="section-title reveal">Normas y <span>Derechos</span></h2>
+    <div class="section-line"></div>
+    <p class="section-lead reveal">Información sobre el uso responsable de la IA, privacidad y derechos de autor de nuestro proyecto musical.</p>
+
+    <div class="normas-grid">
+      <div class="norma-card reveal">
+        <div class="norma-icon green">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--verde3)" stroke-width="1.8">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <h3>Uso Responsable de la IA</h3>
+        <p>Todas las canciones de este proyecto han sido creadas con herramientas de inteligencia artificial con fines educativos y creativos. La IA se utiliza como apoyo al proceso artístico, no como sustitución de la creatividad humana. Se declaran explícitamente las herramientas utilizadas en cada pieza.</p>
+      </div>
+      <div class="norma-card reveal">
+        <div class="norma-icon purple">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--morado3)" stroke-width="1.8">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <h3>Privacidad y Protección de Datos</h3>
+        <p>Este sitio web no recoge ni almacena datos personales de los visitantes. Las canciones subidas permanecen en el navegador del usuario y no se envían a ningún servidor externo. Todo el contenido generado con IA cumple con las condiciones de uso de cada plataforma.</p>
+        <div class="license-badges">
+          <span class="license-badge lb-cc">Creative Commons</span>
+          <span class="license-badge lb-cl">Copyleft</span>
+          <span class="license-badge lb-cp">Copyright</span>
+        </div>
+      </div>
+      <div class="norma-card reveal">
+        <div class="norma-icon gold">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--dorado)" stroke-width="1.8">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 8v4l3 3"/>
+          </svg>
+        </div>
+        <h3>Derechos de Autor</h3>
+        <p>Las letras, melodías y adaptaciones creadas o editadas manualmente por los integrantes del grupo están protegidas bajo licencia Creative Commons Attribution 4.0. Las obras generadas íntegramente por IA se distribuyen bajo los términos de cada herramienta. Se prohíbe el uso comercial sin autorización.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>Dulce Tentación</h3>
+      <p>Proyecto musical creado con pasión, dedicación y el apoyo de la inteligencia artificial. Cada canción es un viaje emocional que invita a sentir y moverse.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navegación</h4>
+      <ul>
+        <li><a href="#inicio" style="color:var(--muted); text-decoration:none;">Inicio</a></li>
+        <li><a href="#canciones" style="color:var(--muted); text-decoration:none;">Canciones</a></li>
+        <li><a href="#proceso" style="color:var(--muted); text-decoration:none;">Proceso Creativo</a></li>
+        <li><a href="#normas" style="color:var(--muted); text-decoration:none;">Normas</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Proyecto</h4>
+      <ul>
+        <li>Grupo: Dulce Tentación</li>
+        <li id="footerCurso">Curso: 2024–2025</li>
+        <li id="footerMateria">Materia: Música / TIC</li>
+        <li id="footerCreditos">Proyecto educativo</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 <span>Dulce Tentación</span> · Proyecto educativo · Todos los derechos reservados</p>
+    <p>Hecho con <span>♥</span> y bachata</p>
+  </div>
+</footer>
+
+<script>
+  /* ── SCROLL REVEAL ── */
+  const reveals = document.querySelectorAll('.reveal');
+  const ro = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); ro.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => ro.observe(r));
+
+  /* ── BAND PHOTO ── */
+  const bandInput = document.getElementById('bandPhotoInput');
+  const bandBox = document.getElementById('bandPhotoBox');
+  const bandHint = document.getElementById('bandHint');
+  bandInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    const existing = bandBox.querySelector('img');
+    if (existing) existing.remove();
+    const img = document.createElement('img');
+    img.src = url;
+    bandBox.appendChild(img);
+    bandHint.style.display = 'none';
+  });
+
+  /* ── AUDIO UPLOAD ── */
+  let pendingAudio = null;
+  const audioInput = document.getElementById('audioInput');
+  const uploadZone = document.getElementById('uploadZone');
+  const metaForm = document.getElementById('songMetaForm');
+
+  uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag'); });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag'));
+  uploadZone.addEventListener('drop', e => {
+    e.preventDefault(); uploadZone.classList.remove('drag');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('audio/')) openMetaForm(file);
+  });
+  audioInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) openMetaForm(file);
+    audioInput.value = '';
+  });
+
+  function openMetaForm(file) {
+    pendingAudio = file;
+    document.getElementById('songTitle').value = file.name.replace(/\.[^/.]+$/, '');
+    metaForm.classList.add('visible');
+    metaForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  document.getElementById('cancelSongBtn').addEventListener('click', () => {
+    metaForm.classList.remove('visible');
+    pendingAudio = null;
+  });
+
+  document.getElementById('addSongBtn').addEventListener('click', () => {
+    const title = document.getElementById('songTitle').value.trim() || 'Sin título';
+    const artist = document.getElementById('songArtist').value.trim() || 'Dulce Tentación';
+    const genre = document.getElementById('songGenre').value;
+    const year = document.getElementById('songYear').value;
+    const desc = document.getElementById('songDesc').value.trim() || 'Sin descripción.';
+    if (!pendingAudio) return;
+    const url = URL.createObjectURL(pendingAudio);
+    addSongCard({ title, artist, genre, year, desc, url });
+    metaForm.classList.remove('visible');
+    pendingAudio = null;
+    document.getElementById('songTitle').value = '';
+    document.getElementById('songArtist').value = 'Dulce Tentación';
+    document.getElementById('songDesc').value = '';
+    document.getElementById('songYear').value = '';
+  });
+
+  function addSongCard({ title, artist, genre, year, desc, url }) {
+    document.getElementById('noSongs')?.remove();
+    const card = document.createElement('div');
+    card.className = 'song-card';
+    card.innerHTML = `
+      <button class="song-delete" title="Eliminar">✕</button>
+      <div class="song-header">
+        <div class="song-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5">
+            <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+          </svg>
+        </div>
+        <div>
+          <div class="song-title">${esc(title)}</div>
+          <div class="song-artist">${esc(artist)}${year ? ' · ' + esc(year) : ''}</div>
+        </div>
+      </div>
+      <div class="song-badge">${esc(genre)}</div>
+      <div class="song-desc">${esc(desc)}</div>
+      <div class="audio-player">
+        <audio controls src="${url}"></audio>
+      </div>
+    `;
+    card.querySelector('.song-delete').addEventListener('click', () => {
+      card.remove();
+      if (!document.querySelectorAll('.song-card').length) {
+        const empty = document.createElement('div');
+        empty.className = 'no-songs'; empty.id = 'noSongs';
+        empty.innerHTML = `<div>
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1">
+            <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+          </svg>
+          <p>Aún no hay canciones. ¡Sube la primera!</p>
+        </div>`;
+        document.getElementById('songsGrid').appendChild(empty);
+      }
+    });
+    document.getElementById('songsGrid').appendChild(card);
+  }
+
+  function esc(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+</script>
+</body>
+</html>
